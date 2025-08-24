@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DEM Moda Infantil - Catálogo</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="logo">
+                <h1>DEM</h1>
+                <span>MODA INFANTIL</span>
+            </div>
+            <nav class="nav">
+                <ul>
+                    <li><a href="#home">Início</a></li>
+                    <li><a href="#catalog">Catálogo</a></li>
+                    <li><a href="#about">Sobre</a></li>
+                    <li><a href="#contact">Contato</a></li>
+                </ul>
+            </nav>
+            <div class="header-actions">
+                <button class="admin-btn" onclick="toggleAdminPanel()">
+                    <i class="fas fa-cog"></i> Admin
+                </button>
+                <button class="cart-btn">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span class="cart-count">0</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="hero-content">
+            <h1 class="hero-title">Moda Infantil do Futuro</h1>
+            <p class="hero-subtitle">Roupas coloridas, confortáveis e cheias de estilo para as crianças mais especiais</p>
+            <button class="cta-btn" onclick="scrollToSection('catalog')">
+                Explorar Catálogo
+                <i class="fas fa-arrow-right"></i>
+            </button>
+        </div>
+        <div class="hero-shapes">
+            <div class="shape shape-1"></div>
+            <div class="shape shape-2"></div>
+            <div class="shape shape-3"></div>
+            <div class="shape shape-4"></div>
+        </div>
+    </section>
+
+    <!-- Admin Panel -->
+    <div id="adminPanel" class="admin-panel">
+        <div class="admin-content">
+            <div class="admin-header">
+                <h2>Painel Administrativo</h2>
+                <button class="close-admin" onclick="toggleAdminPanel()" title="Fechar painel" aria-label="Fechar painel">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <div class="admin-tabs">
+                <button class="tab-btn active" onclick="showTab('add-product')">Adicionar Produto</button>
+                <button class="tab-btn" onclick="showTab('manage-products')">Gerenciar Produtos</button>
+            </div>
+
+            <!-- Add Product Tab -->
+            <div id="add-product" class="tab-content active">
+                <form id="productForm" class="product-form">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="productName">Nome do Produto</label>
+                            <input type="text" id="productName" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="productPrice">Preço (R$)</label>
+                            <input type="number" id="productPrice" step="0.01" required>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="productCategory">Categoria</label>
+                            <select id="productCategory" required>
+                                <option value="">Selecione...</option>
+                                <option value="bebe">Bebê (0-2 anos)</option>
+                                <option value="menina">Menina (2-12 anos)</option>
+                                <option value="menino">Menino (2-12 anos)</option>
+                                <option value="teen">Teen (12-16 anos)</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="productBrand">Marca</label>
+                            <input type="text" id="productBrand" required>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="productMaterial">Material</label>
+                            <input type="text" id="productMaterial" placeholder="Ex: 100% Algodão" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="productCare">Cuidados</label>
+                            <input type="text" id="productCare" placeholder="Ex: Lavar à máquina 30°C">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="productSizes">Tamanhos Disponíveis</label>
+                        <div class="size-checkboxes">
+                            <label><input type="checkbox" value="RN"> RN (0-3m)</label>
+                            <label><input type="checkbox" value="P"> P (3-6m)</label>
+                            <label><input type="checkbox" value="M"> M (6-12m)</label>
+                            <label><input type="checkbox" value="G"> G (1-2a)</label>
+                            <label><input type="checkbox" value="2"> 2 anos</label>
+                            <label><input type="checkbox" value="3"> 3 anos</label>
+                            <label><input type="checkbox" value="4"> 4 anos</label>
+                            <label><input type="checkbox" value="6"> 6 anos</label>
+                            <label><input type="checkbox" value="8"> 8 anos</label>
+                            <label><input type="checkbox" value="10"> 10 anos</label>
+                            <label><input type="checkbox" value="12"> 12 anos</label>
+                            <label><input type="checkbox" value="14"> 14 anos</label>
+                            <label><input type="checkbox" value="16"> 16 anos</label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="productColors">Cores Disponíveis</label>
+                        <input type="text" id="productColors" placeholder="Ex: Rosa, Azul, Amarelo">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="productDescription">Descrição</label>
+                        <textarea id="productDescription" rows="4" required></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="productImage">URL da Imagem</label>
+                        <input type="url" id="productImage" placeholder="https://exemplo.com/imagem.jpg" required>
+                    </div>
+
+                    <button type="submit" class="submit-btn">
+                        <i class="fas fa-plus"></i> Adicionar Produto
+                    </button>
+                </form>
+            </div>
+
+            <!-- Manage Products Tab -->
+            <div id="manage-products" class="tab-content">
+                <div class="products-list">
+                    <h3>Produtos Cadastrados</h3>
+                    <div id="productsList" class="admin-products-grid">
+                        <!-- Products will be loaded here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Catalog Section -->
+    <section id="catalog" class="catalog">
+        <div class="container">
+            <div class="section-header">
+                <h2>Nosso Catálogo</h2>
+                <p>Descubra as melhores roupas para seu pequeno</p>
+            </div>
+
+            <!-- Filter Buttons -->
+            <div class="filter-buttons">
+                <button class="filter-btn active" data-filter="all">Todos</button>
+                <button class="filter-btn" data-filter="bebe">Bebê</button>
+                <button class="filter-btn" data-filter="menina">Menina</button>
+                <button class="filter-btn" data-filter="menino">Menino</button>
+                <button class="filter-btn" data-filter="teen">Teen</button>
+            </div>
+
+            <!-- Products Grid -->
+            <div id="productsGrid" class="products-grid">
+                <!-- Products will be loaded here -->
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="about">
+        <div class="container">
+            <div class="about-content">
+                <div class="about-text">
+                    <h2>Sobre a DEM Moda Infantil</h2>
+                    <p>Somos uma marca dedicada a criar roupas infantis que combinam estilo, conforto e qualidade. Nossa missão é vestir as crianças com peças que reflitam sua personalidade única e permitam que elas se expressem livremente.</p>
+                    <div class="features">
+                        <div class="feature">
+                            <i class="fas fa-heart"></i>
+                            <h3>Feito com Amor</h3>
+                            <p>Cada peça é cuidadosamente selecionada</p>
+                        </div>
+                        <div class="feature">
+                            <i class="fas fa-leaf"></i>
+                            <h3>Materiais Sustentáveis</h3>
+                            <p>Priorizamos tecidos ecológicos e seguros</p>
+                        </div>
+                        <div class="feature">
+                            <i class="fas fa-star"></i>
+                            <h3>Qualidade Premium</h3>
+                            <p>Durabilidade e conforto garantidos</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="about-image">
+                    <div class="image-placeholder">
+                        <i class="fas fa-child"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="contact">
+        <div class="container">
+            <h2>Entre em Contato</h2>
+            <div class="contact-info">
+                <div class="contact-item">
+                    <i class="fas fa-phone"></i>
+                    <h3>Telefone</h3>
+                    <p>(11) 99999-9999</p>
+                </div>
+                <div class="contact-item">
+                    <i class="fas fa-envelope"></i>
+                    <h3>Email</h3>
+                    <p>contato@demmodainfantil.com.br</p>
+                </div>
+                <div class="contact-item">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <h3>Endereço</h3>
+                    <p>São Paulo, SP</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>DEM Moda Infantil</h3>
+                    <p>Vestindo sonhos, criando memórias</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Links Rápidos</h4>
+                    <ul>
+                        <li><a href="#home">Início</a></li>
+                        <li><a href="#catalog">Catálogo</a></li>
+                        <li><a href="#about">Sobre</a></li>
+                        <li><a href="#contact">Contato</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Redes Sociais</h4>
+                    <div class="social-links">
+                        <a href="#" title="Instagram"><i class="fab fa-instagram"></i></a>
+                        <a href="#" title="Facebook"><i class="fab fa-facebook"></i></a>
+                        <a href="#" title="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 DEM Moda Infantil. Todos os direitos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Product Modal -->
+    <div id="productModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <div id="modalContent">
+                <!-- Product details will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
