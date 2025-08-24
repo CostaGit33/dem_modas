@@ -13,7 +13,7 @@
     <header class="header">
         <div class="container">
             <div class="logo">
-                <h1>DEM</h1>
+                <img src="logo.png" alt="DEM Moda Infantil" class="logo-img">
                 <span>MODA INFANTIL</span>
             </div>
             <nav class="nav">
@@ -59,7 +59,7 @@
         <div class="admin-content">
             <div class="admin-header">
                 <h2>Painel Administrativo</h2>
-                <button class="close-admin" onclick="toggleAdminPanel()" title="Fechar painel" aria-label="Fechar painel">
+                <button class="close-admin" onclick="toggleAdminPanel()" aria-label="Fechar painel administrativo">
                     <i class="fas fa-times"></i>
                 </button>
             </div>
@@ -250,7 +250,10 @@
         <div class="container">
             <div class="footer-content">
                 <div class="footer-section">
-                    <h3>DEM Moda Infantil</h3>
+                    <div class="footer-logo">
+                        <img src="logo.png" alt="DEM Moda Infantil" class="footer-logo-img">
+                        <h3>DEM Moda Infantil</h3>
+                    </div>
                     <p>Vestindo sonhos, criando memórias</p>
                 </div>
                 <div class="footer-section">
@@ -277,6 +280,29 @@
         </div>
     </footer>
 
+    <!-- Login Modal -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content login-modal">
+            <span class="close-login-modal">&times;</span>
+            <div class="login-content">
+                <h2>Acesso Administrativo</h2>
+                <p>Digite a senha para acessar o painel administrativo</p>
+                <form id="loginForm" class="login-form">
+                    <div class="form-group">
+                        <label for="adminPassword">Senha:</label>
+                        <input type="password" id="adminPassword" placeholder="Digite sua senha" required>
+                    </div>
+                    <button type="submit" class="login-btn">
+                        <i class="fas fa-lock"></i> Entrar
+                    </button>
+                </form>
+                <div id="loginError" class="login-error">
+                    Senha incorreta! Tente novamente.
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Product Modal -->
     <div id="productModal" class="modal">
         <div class="modal-content">
@@ -290,3 +316,4 @@
     <script src="script.js"></script>
 </body>
 </html>
+

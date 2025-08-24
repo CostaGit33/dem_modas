@@ -4,6 +4,10 @@
 let products = [];
 let cart = [];
 let currentEditingProduct = null;
+let isAdminAuthenticated = false;
+
+// Configurações de segurança
+const ADMIN_PASSWORD = "dem2025"; // Altere esta senha para uma mais segura
 
 // Produtos iniciais de exemplo
 const initialProducts = [
@@ -95,6 +99,9 @@ const initialProducts = [
 
 // Inicialização
 document.addEventListener('DOMContentLoaded', function() {
+    // Verificar autenticação ao carregar
+    checkAuthStatus();
+    
     // Carregar produtos do localStorage ou usar produtos iniciais
     const savedProducts = localStorage.getItem('demProducts');
     if (savedProducts) {
@@ -117,12 +124,18 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Event listeners
     setupEventListeners();
+    
+    // Adicionar botão de logout ao painel admin
+    addLogoutButton();
 });
 
 // Configurar event listeners
 function setupEventListeners() {
     // Formulário de produto
     document.getElementById('productForm').addEventListener('submit', handleProductSubmit);
+    
+    // Formulário de login
+    document.getElementById('loginForm').addEventListener('submit', handleLogin);
     
     // Filtros de categoria
     document.querySelectorAll('.filter-btn').forEach(btn => {
@@ -133,30 +146,111 @@ function setupEventListeners() {
         });
     });
     
-    // Modal
+    // Modal de produto
     document.querySelector('.close-modal').addEventListener('click', closeModal);
+    
+    // Modal de login
+    document.querySelector('.close-login-modal').addEventListener('click', closeLoginModal);
+    
+    // Clique fora dos modais
     window.addEventListener('click', function(e) {
-        const modal = document.getElementById('productModal');
-        if (e.target === modal) {
+        const productModal = document.getElementById('productModal');
+        const loginModal = document.getElementById('loginModal');
+        const adminPanel = document.getElementById('adminPanel');
+        
+        if (e.target === productModal) {
             closeModal();
         }
-    });
-    
-    // Admin panel
-    window.addEventListener('click', function(e) {
-        const adminPanel = document.getElementById('adminPanel');
+        if (e.target === loginModal) {
+            closeLoginModal();
+        }
         if (e.target === adminPanel) {
             toggleAdminPanel();
         }
     });
 }
 
+// Funções de Autenticação
+function handleLogin(e) {
+    e.preventDefault();
+    
+    const password = document.getElementById('adminPassword').value;
+    const errorDiv = document.getElementById('loginError');
+    
+    if (password === ADMIN_PASSWORD) {
+        isAdminAuthenticated = true;
+        closeLoginModal();
+        toggleAdminPanel();
+        showNotification('Login realizado com sucesso!', 'success');
+        
+        // Salvar estado de autenticação (válido por 1 hora)
+        const authData = {
+            authenticated: true,
+            timestamp: Date.now()
+        };
+        localStorage.setItem('demAdminAuth', JSON.stringify(authData));
+    } else {
+        errorDiv.style.display = 'block';
+        document.getElementById('adminPassword').value = '';
+        document.getElementById('adminPassword').focus();
+    }
+}
+
+function checkAuthStatus() {
+    const authData = localStorage.getItem('demAdminAuth');
+    if (authData) {
+        const parsed = JSON.parse(authData);
+        const oneHour = 60 * 60 * 1000; // 1 hora em millisegundos
+        
+        if (Date.now() - parsed.timestamp < oneHour) {
+            isAdminAuthenticated = true;
+            return true;
+        } else {
+            // Sessão expirada
+            localStorage.removeItem('demAdminAuth');
+        }
+    }
+    return false;
+}
+
+function logout() {
+    isAdminAuthenticated = false;
+    localStorage.removeItem('demAdminAuth');
+    const panel = document.getElementById('adminPanel');
+    panel.style.display = 'none';
+    showNotification('Logout realizado com sucesso!', 'info');
+}
+
+function showLoginModal() {
+    const modal = document.getElementById('loginModal');
+    modal.style.display = 'block';
+    document.getElementById('adminPassword').focus();
+    
+    // Limpar erro anterior
+    document.getElementById('loginError').style.display = 'none';
+    document.getElementById('adminPassword').value = '';
+}
+
+function closeLoginModal() {
+    const modal = document.getElementById('loginModal');
+    modal.style.display = 'none';
+    document.getElementById('adminPassword').value = '';
+    document.getElementById('loginError').style.display = 'none';
+}
+
 // Funções do Admin Panel
 function toggleAdminPanel() {
     const panel = document.getElementById('adminPanel');
+    
     if (panel.style.display === 'flex') {
         panel.style.display = 'none';
     } else {
+        // Verificar se está autenticado
+        if (!isAdminAuthenticated && !checkAuthStatus()) {
+            showLoginModal();
+            return;
+        }
+        
         panel.style.display = 'flex';
         renderAdminProducts();
     }
@@ -677,6 +771,21 @@ function importProducts(event) {
     reader.readAsText(file);
 }
 
+function addLogoutButton() {
+    const adminHeader = document.querySelector('.admin-header');
+    if (adminHeader && !document.getElementById('logoutBtn')) {
+        const logoutBtn = document.createElement('button');
+        logoutBtn.id = 'logoutBtn';
+        logoutBtn.className = 'logout-btn';
+        logoutBtn.innerHTML = '<i class="fas fa-sign-out-alt"></i> Sair';
+        logoutBtn.onclick = logout;
+        
+        // Inserir antes do botão de fechar
+        const closeBtn = adminHeader.querySelector('.close-admin');
+        adminHeader.insertBefore(logoutBtn, closeBtn);
+    }
+}
+
 // Tornar funções globais para uso no HTML
 window.toggleAdminPanel = toggleAdminPanel;
 window.showTab = showTab;
@@ -689,3 +798,5 @@ window.scrollToSection = scrollToSection;
 window.exportProducts = exportProducts;
 window.importProducts = importProducts;
 
+window.showLoginModal = showLoginModal;
+window.closeLoginModal = closeLoginModal;
